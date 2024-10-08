@@ -10,6 +10,8 @@ router.post('/employees', validateEmployee, employeeController.createEmployee);
 router.get('/employees/:user_id', employeeController.getEmployeesByUserId);
 // Get all employees
 router.get('/employees', employeeController.getAllEmployees);
+// Update employee by id
+router.put('/employees/:id', validateEmployee, employeeController.updateEployee);
 // Delete employee by id
 router.delete('/employees/:id', employeeController.deleteEmployee);
 

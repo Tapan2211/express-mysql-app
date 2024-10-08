@@ -39,6 +39,23 @@ const getAllEmployees = async (req, res) => {
     }
 };
 
+// Update employee by id
+const updateEployee = async (req, res) => {
+    try {
+        const emp_id = req.params.id;
+        const updatedData = req.body;
+        const result = await employeeService.updateEmployee(emp_id, updatedData);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        res.json({ message: 'Employee updated successfully', updatedData });
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 // Delete employee by id
 const deleteEmployee = async (req, res) => {
     try {
@@ -60,5 +77,6 @@ module.exports = {
     createEmployee,
     getEmployeesByUserId,
     getAllEmployees,
+    updateEployee,
     deleteEmployee
 };

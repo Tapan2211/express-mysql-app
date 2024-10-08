@@ -37,6 +37,17 @@ const getAllEmployees = async () => {
     return results;
 };
 
+// Get update employee information
+const updateEmployees = async (emp_id, employeeData) => {
+    const { user_id, emp_name, emp_email, number, age, gender, salary, address } = employeeData;
+    const sql = `UPDATE employee_information 
+                 SET user_id = ?, emp_name = ?, emp_email = ?, number = ?, age = ?, gender = ?, salary = ?, address = ?
+                 WHERE emp_id = ?`;
+    const [results] = await db.execute(sql, [user_id, emp_name, emp_email, number, age, gender, salary, address, emp_id]);
+    return results;
+
+}
+
 // Delete employee by id
 const deleteEmployees = async (emp_id) => {
     const sql = 'DELETE FROM employee_information WHERE emp_id = ?';
@@ -48,5 +59,6 @@ module.exports = {
     createEmployee,
     getEmployeesByUserId,
     getAllEmployees,
+    updateEmployees,
     deleteEmployees
 };
