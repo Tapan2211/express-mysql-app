@@ -4,6 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const students = require('./routes/student.routes');
 const productCategory = require('./routes/product_category.route');
+const categories = require('./routes/categories.routes');
 
 const cors = require('cors');
 const db = require('./config/database');
@@ -24,6 +25,7 @@ app.use('/api', userRoutes);
 app.use('/api', employeeRoutes);
 app.use('/api', students);
 app.use('/api', productCategory);
+app.use('/api', categories);
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const createProductCategory = async (category) => {
     const { category_name, image, description } = category;
-    if (!category_name || !image || !description) {
+    if (!category_name || !image) {
         throw new Error('Category name, image, and description must not be undefined');
     }
 
