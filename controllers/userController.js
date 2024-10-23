@@ -1,5 +1,8 @@
 const { validationResult } = require('express-validator');
 const userService = require('../services/userService');
+const bcrypt = require('bcryptjs');
+const jwtUtils = require('../config/jwtUtils');
+const { use } = require('../routes/userRoutes');
 
 const createUser = async (req, res) => {
     const errors = validationResult(req); // Use validationResult
@@ -8,16 +11,49 @@ const createUser = async (req, res) => {
     }
 
     try {
+        // Hash the user's password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        req.body.password = hashedPassword;
+
         const user = await userService.createUser(req.body);
+
+        // Generate JWT token
+        const token = jwtUtils.generateToken(user);
+        console.log("JWT_TOKEN", token);
+
         res.status(201).json({
             message: 'Successfully created user', user: {
                 id: user.insertId, // Assuming you want to return the inserted ID
                 name: req.body.name,
                 email: req.body.email
-            }
+            },
+            token
         });
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+}
+
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await userService.getUserByMail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwtUtils.generateToken(user);
+        res.json({
+            message: 'Login successful',
+            token
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -65,6 +101,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     createUser,
+    loginUser,
     getUser,
     getAllUsers,
     updateUser,

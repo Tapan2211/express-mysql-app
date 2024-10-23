@@ -8,6 +8,10 @@ const getUserById = async (id) => {
     return await userModel.getUserById(id);
 }
 
+const getUserByMail = async (email) => {
+    return await userModel.getUserByMail(email);
+}
+
 const getAllUser = async () => {
     return await userModel.getAllUsers();
 }
@@ -23,6 +27,7 @@ const deleteUser = async (id) => {
 module.exports = {
     createUser,
     getUserById,
+    getUserByMail,
     getAllUser,
     updateUser,
     deleteUser,
